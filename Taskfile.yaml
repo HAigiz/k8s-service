@@ -1,0 +1,45 @@
+version: "3"
+
+tasks:
+  config:
+    cmds:
+      - kubectl config set-cluster sirius --server=https://k3s.klsh.ru:6443 --certificate-authority=./cert/server-ca.crt --embed-certs=true
+      - kubectl config set-credentials khafizov --client-certificate=./cert/user.crt --client-key=./cert/user.key --embed-certs=true
+      - kubectl config set-context sirius --cluster=sirius --namespace=khafizov --user=khafizov
+      - kubectl config use-context sirius
+
+  build:
+    cmds:
+     - docker build -f ./docker/api.dockerfile -t git.klsh.ru/khafizov/api-web:latest .
+     - docker build -f ./docker/info.dockerfile -t git.klsh.ru/khafizov/info-web:latest .
+     - docker build -f ./docker/login.dockerfile -t git.klsh.ru/khafizov/login-web:latest .
+     - docker build -f ./docker/root.dockerfile -t git.klsh.ru/khafizov/root-web:latest .
+  
+  push:
+    cmds:
+      - docker push git.klsh.ru/khafizov/api-web:latest
+      - docker push git.klsh.ru/khafizov/info-web:latest
+      - docker push git.klsh.ru/khafizov/login-web:latest 
+      - docker push git.klsh.ru/khafizov/root-web:latest 
+  
+  reload:
+    cmds:
+      - kubectl rollout restart deployment api-web info-web login-web root-web
+
+  deploy:
+    cmds:
+      - kubectl apply -n khafizov -f ./deployments/api-service/
+      - kubectl apply -n khafizov -f ./deployments/info-service/
+      - kubectl apply -n khafizov -f ./deployments/login-service/
+      - kubectl apply -n khafizov -f ./deployments/root-service/
+      - kubectl apply -n khafizov -f ./deployments/ingress
+  
+  delete:
+    cmds:
+      - kubectl delete deployment api-web info-web login-web root-web
+
+  release:
+    cmds:
+      - task: build
+      - task: push
+      - task: deploy

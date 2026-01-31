@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-web
+  namespace: khafizov
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: api-web
+  template:
+    metadata:
+      labels:
+        app: api-web
+    spec:
+      containers:
+      - name: api-web
+        image: git.klsh.ru/khafizov/api-web:latest
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "10m"
+          limits:
+            memory: "5Mi"
+            cpu: "10m"
+        envFrom:
+            - configMapRef:
+                name: api-conf

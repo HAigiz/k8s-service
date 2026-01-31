@@ -1,0 +1,39 @@
+name: Checking golang files
+
+on:
+  push:
+    paths:
+      - '**.go'
+      - 'go.mod'
+  pull_request:
+    paths:
+      - '**.go'
+      - 'go.mod'
+
+jobs:
+  check_golang:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Job start
+        run: echo "THe job was automatically triggered by a ${{ github.event_name }} event."
+
+      - name: Install GoLang v1.24.10
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.24.10"
+      
+      - name: Display Go version
+        run: go version
+      
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.6
+          args: --timeout=5m
+
+      - name: Run Go tests
+        run: go test -v ./...

@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myingress
+  namespace: khafizov
+  labels:
+    app.kubernetes.io/name: myingress
+  annotations:
+    traefik.ingress.networking.io/router.entrypounts: web
+spec:
+  rules:
+  - host: khafizov.klsh.ru
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: root-ser
+            port: 
+              number: 80
+
+
+      - pathType: Prefix
+        path: "/api"
+        backend:
+          service:
+            name: api-ser
+            port: 
+              number: 80
+
+
+      - pathType: Prefix
+        path: "/info"
+        backend:
+          service:
+            name: info-ser
+            port: 
+              number: 80
+
+
+      - pathType: Prefix
+        path: "/login"
+        backend:
+          service:
+            name: login-ser
+            port: 
+              number: 80

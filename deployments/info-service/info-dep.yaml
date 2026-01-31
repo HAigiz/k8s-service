@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: info-web
+  namespace: khafizov
+spec:
+  selector:
+    matchLabels:
+      app: info-web
+  template:
+    metadata:
+      labels:
+        app: info-web
+    spec:
+      containers:
+      - name: info-web
+        image: git.klsh.ru/khafizov/info-web:latest
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "10m"
+          limits:
+            memory: "5Mi"
+            cpu: "10m"

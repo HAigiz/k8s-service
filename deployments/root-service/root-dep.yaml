@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: root-web
+  namespace: khafizov
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: root-web
+  template:
+    metadata:
+      labels:
+        app: root-web
+    spec:
+      containers:
+      - name: root-web
+        image: git.klsh.ru/khafizov/root-web:latest
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "10m"
+          limits:
+            memory: "5Mi"
+            cpu: "10m"

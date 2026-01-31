@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-web
+  namespace: khafizov
+spec:
+  selector:
+    matchLabels:
+      app: login-web
+  template:
+    metadata:
+      labels:
+        app: login-web
+    spec:
+      containers:
+      - name: login-web
+        image: git.klsh.ru/khafizov/login-web:latest
+        resources:
+          requests:
+            memory: "5Mi"
+            cpu: "10m"
+          limits:
+            memory: "5Mi"
+            cpu: "10m"

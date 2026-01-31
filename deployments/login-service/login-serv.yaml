@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-ser
+  namespace: khafizov
+spec:
+  selector:
+    app: login-web
+  ports:
+  - port: 80
+    targetPort: 8080
